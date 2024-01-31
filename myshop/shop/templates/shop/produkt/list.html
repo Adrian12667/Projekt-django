@@ -1,0 +1,35 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+  {% if kategoria %}{{ kategoria.nazwa }}{% else %}Produkt{% endif %}
+{% endblock %}
+
+{% block content %}
+  <div id="sidebar">
+    <h3>Kategorie</h3>
+    <ul>
+      <li {% if not kategoria %}class="selected" {% endif %}>
+        <a href="{% url 'shop:produkt_list' %}">Wszystkie</a>
+      </li>
+      {% for c in kategorie %}
+        <li {% if kategoria.slug == c.slug %}class="selected" {% endif %}>
+          <a href="{{ c.get_absolute_url }}">{{ c.nazwa }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id="main" class="produkt-list">
+    <h1>{% if kategoria %}{{ kategoria.nazwa }}{% else %}Produkty{% endif %}</h1>
+    {% for produkt in produkty %}
+      <div class="item">
+        <a href="{{ produkt.get_absolute_url }}">
+          <img src="{% if produkt.image %}{{ produkt.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+        </a>
+        <a href="{{ produkt.get_absolute_url }}">{{ produkt.nazwa }}</a>
+        <br>
+         {{ produkt.cena }} zł
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
